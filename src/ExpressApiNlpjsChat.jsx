@@ -2,6 +2,9 @@ import { useState } from "react";
 import { Chip, FormControl, Select, MenuItem } from "@mui/material";
 import axios from "axios";
 
+import Logo from "../images/logo.png";
+import { useNavigate } from "react-router-dom";
+
 async function getMessageFromApi(query) {
   console.log(query);
   // const url = `http://localhost:4003/chat?message=${query}`;
@@ -23,6 +26,8 @@ async function getMessageFromApi(query) {
 }
 
 const Chat = () => {
+  const navigate = useNavigate();
+
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [selectOptions, setSelectOptions] = useState([
@@ -70,6 +75,18 @@ const Chat = () => {
   return (
     <>
       <div>
+        <img
+          src={Logo}
+          alt="Logo"
+          width={100}
+          height={100}
+          style={{
+            marginBottom: "30px",
+          }}
+          onClick={() => {
+            navigate("/");
+          }}
+        />
         <div style={{}}>
           <input
             type="text"
@@ -119,11 +136,12 @@ const Chat = () => {
               {/* <MenuItem value={option.label}>{option.label}</MenuItem> */}
             </div>;
           })}
+            {/* 
           <FormControl
             key="formcontrol"
             sx={{ m: 1, minWidth: 120 }}
           ></FormControl>
-          {/* <MenuItem value={10}>Ten</MenuItem>
+          <MenuItem value={10}>Ten</MenuItem>
         <MenuItem value={20}>Twenty</MenuItem>
         <MenuItem value={30}>Thirty</MenuItem> */}
           {/* <button

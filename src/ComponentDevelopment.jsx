@@ -14,8 +14,10 @@ import {
 
 // import  images/logo.png
 import Logo from "../images/logo.png";
+import { useNavigate } from "react-router-dom";
 
 const Chat = () => {
+  const navigate = useNavigate();
   const top100Films = [
     { label: "The Shawshank Redemption", year: 1994 },
     { label: "The Godfather", year: 1972 },
@@ -57,8 +59,6 @@ const Chat = () => {
     // { type: "response", text: "data.message" },
   };
 
-
-
   return (
     <>
       <img
@@ -68,6 +68,9 @@ const Chat = () => {
         height={100}
         style={{
           marginBottom: "30px",
+        }}
+        onClick={() => {
+          navigate("/");
         }}
       />
 

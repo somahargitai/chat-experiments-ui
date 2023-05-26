@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Chip, FormControl, Select, MenuItem } from "@mui/material";
 import axios from "axios";
+import Logo from "../images/logo.png";
+import { useNavigate } from "react-router-dom";
 
 async function getMessageFromApi(data) {
   console.log(data);
@@ -10,13 +12,15 @@ async function getMessageFromApi(data) {
     url: "http://localhost:8000/process",
     data: data,
   });
-  console.log('RESPONSE')
-  console.log(response.data)
+  console.log("RESPONSE");
+  console.log(response.data);
 
   return response.data.response;
 }
 
 const FastApiBlenderBotChat = () => {
+  const navigate = useNavigate();
+
   const [allUserMessages, setAllUserMessages] = useState([]);
   const [messagesVisible, setMessagesVisible] = useState([]);
   const [inputFieldText, setInputFieldText] = useState("");
@@ -47,7 +51,7 @@ const FastApiBlenderBotChat = () => {
     const newUserMessage = inputFieldText;
     const newAllUserMessages = [...allUserMessages, newUserMessage];
     setAllUserMessages(newAllUserMessages);
-    console.log('QUESTIONS')
+    console.log("QUESTIONS");
     setInputFieldText("");
     // const response = await fetch(`/api/chat?message=${query}`);
 
@@ -58,7 +62,6 @@ const FastApiBlenderBotChat = () => {
     // ];
 
     const response = await getMessageFromApi(newAllUserMessages);
-    
 
     // const data = await response.json();
     setMessagesVisible([
@@ -76,6 +79,18 @@ const FastApiBlenderBotChat = () => {
   return (
     <>
       <div>
+        <img
+          src={Logo}
+          alt="Logo"
+          width={100}
+          height={100}
+          style={{
+            marginBottom: "30px",
+          }}
+          onClick={() => {
+            navigate("/");
+          }}
+        />
         <div style={{}}>
           <input
             type="text"
@@ -125,11 +140,12 @@ const FastApiBlenderBotChat = () => {
               {/* <MenuItem value={option.label}>{option.label}</MenuItem> */}
             </div>;
           })}
+          {/* 
           <FormControl
             key="formcontrol"
             sx={{ m: 1, minWidth: 120 }}
           ></FormControl>
-          {/* <MenuItem value={10}>Ten</MenuItem>
+        <MenuItem value={10}>Ten</MenuItem>
         <MenuItem value={20}>Twenty</MenuItem>
         <MenuItem value={30}>Thirty</MenuItem> */}
           {/* <button
