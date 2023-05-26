@@ -16,7 +16,7 @@ async function getMessageFromApi(data) {
   return response.data.response;
 }
 
-const FastChat = () => {
+const FastApiBlenderBotChat = () => {
   const [allUserMessages, setAllUserMessages] = useState([]);
   const [messagesVisible, setMessagesVisible] = useState([]);
   const [inputFieldText, setInputFieldText] = useState("");
@@ -188,4 +188,4 @@ const FastChat = () => {
   );
 };
 
-export default FastChat;
+export default FastApiBlenderBotChat;

@@ -6,7 +6,6 @@ const Landing = () => {
 
   return (
     <Container>
-      {/* img logo comes here */}
       <img
         src="../images/logo.png"
         alt="logo"
@@ -22,26 +21,26 @@ const Landing = () => {
         <Button
           variant="contained"
           onClick={() => {
-            navigate("/chat1");
+            navigate("/express-api-nlpjs-chat");
           }}
         >
-          Chat
+          Express API NLP.js Chat
         </Button>
         <Button
           variant="contained"
           onClick={() => {
-            navigate("/chat2");
+            navigate("/component-development");
           }}
         >
-          Selector
+          Component development
         </Button>
         <Button
           variant="contained"
           onClick={() => {
-            navigate("/fastchat");
+            navigate("/fast-api-blenderbot-chat");
           }}
         >
-          FastChat
+          Fast API BlenderBot Chat
         </Button>
       </Stack>
     </Container>
