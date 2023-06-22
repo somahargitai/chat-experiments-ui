@@ -1,29 +1,35 @@
 import { useState } from "react";
-import { Chip, FormControl, Select, MenuItem } from "@mui/material";
+import { Chip, FormControl, Select, MenuItem, Typography } from "@mui/material";
 import axios from "axios";
-import Logo from "../images/logo.png";
+
+import Logo from "../../images/logo.png";
 import { useNavigate } from "react-router-dom";
 
-async function getMessageFromApi(data) {
-  console.log(data);
+async function getMessageFromApi(query) {
+  console.log(query);
+  // const url = `http://localhost:4003/chat?message=${query}`;
+  // console.log(url);
 
   const response = await axios({
-    method: "POST",
-    url: "http://localhost:8000/process",
-    data: data,
+    method: "GET",
+    url: "http://localhost:4003/chat",
+    params: {
+      message: query,
+    },
+    // headers: {
+    //   Authorization: `Bearer ${userToken}`,
+    // },
   });
-  console.log("RESPONSE");
-  console.log(response.data);
 
-  return response.data.response;
+  console.log(response);
+  return response.data;
 }
 
-const FastApiBlenderBotChat = () => {
+const Chat = () => {
   const navigate = useNavigate();
 
-  const [allUserMessages, setAllUserMessages] = useState([]);
-  const [messagesVisible, setMessagesVisible] = useState([]);
-  const [inputFieldText, setInputFieldText] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [inputValue, setInputValue] = useState("");
   const [selectOptions, setSelectOptions] = useState([
     {
       type: "value",
@@ -44,29 +50,19 @@ const FastApiBlenderBotChat = () => {
   ]);
 
   const handleInput = (e) => {
-    setInputFieldText(e.target.value);
+    setInputValue(e.target.value);
   };
 
   const submitMessage = async () => {
-    const newUserMessage = inputFieldText;
-    const newAllUserMessages = [...allUserMessages, newUserMessage];
-    setAllUserMessages(newAllUserMessages);
-    console.log("QUESTIONS");
-    setInputFieldText("");
+    const query = inputValue;
+    setInputValue("");
     // const response = await fetch(`/api/chat?message=${query}`);
-
-    // const messages = [
-    //   "Hello, how can I help you?",
-    //   "What services do you offer?",
-    //   "How much does it cost?",
-    // ];
-
-    const response = await getMessageFromApi(newAllUserMessages);
+    const response = await getMessageFromApi(query);
 
     // const data = await response.json();
-    setMessagesVisible([
-      ...messagesVisible,
-      { type: "query", text: newUserMessage },
+    setMessages([
+      ...messages,
+      { type: "query", text: query },
       { type: "response", text: response },
     ]);
     // setMessages([
@@ -91,6 +87,9 @@ const FastApiBlenderBotChat = () => {
             navigate("/");
           }}
         />
+        <Typography variant="h5" sx={{ marginBottom: "30px" }}>
+          Nlp.js chat
+        </Typography>
         <div style={{}}>
           <input
             type="text"
@@ -100,7 +99,7 @@ const FastApiBlenderBotChat = () => {
               fontSize: "20px",
               marginRight: "10px",
             }}
-            value={inputFieldText}
+            value={inputValue}
             onChange={handleInput}
             // when enter, send message
             onKeyPress={(e) => {
@@ -145,7 +144,7 @@ const FastApiBlenderBotChat = () => {
             key="formcontrol"
             sx={{ m: 1, minWidth: 120 }}
           ></FormControl>
-        <MenuItem value={10}>Ten</MenuItem>
+          <MenuItem value={10}>Ten</MenuItem>
         <MenuItem value={20}>Twenty</MenuItem>
         <MenuItem value={30}>Thirty</MenuItem> */}
           {/* <button
@@ -163,7 +162,7 @@ const FastApiBlenderBotChat = () => {
             width: "70vw",
           }}
         >
-          {messagesVisible.map((message, index) => (
+          {messages.map((message, index) => (
             <div
               key={index}
               style={{
@@ -204,4 +203,4 @@ const FastApiBlenderBotChat = () => {
   );
 };
 
-export default FastApiBlenderBotChat;
+export default Chat;

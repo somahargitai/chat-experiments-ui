@@ -1,35 +1,29 @@
 import { useState } from "react";
-import { Chip, FormControl, Select, MenuItem } from "@mui/material";
+import { Chip, FormControl, Select, MenuItem, Typography } from "@mui/material";
 import axios from "axios";
-
-import Logo from "../images/logo.png";
+import Logo from "../../images/logo.png";
 import { useNavigate } from "react-router-dom";
 
-async function getMessageFromApi(query) {
-  console.log(query);
-  // const url = `http://localhost:4003/chat?message=${query}`;
-  // console.log(url);
+async function getMessageFromApi(data) {
+  console.log(data);
 
   const response = await axios({
-    method: "GET",
-    url: "http://localhost:4003/chat",
-    params: {
-      message: query,
-    },
-    // headers: {
-    //   Authorization: `Bearer ${userToken}`,
-    // },
+    method: "POST",
+    url: "http://localhost:8000/process",
+    data: data,
   });
+  console.log("RESPONSE");
+  console.log(response.data);
 
-  console.log(response);
-  return response.data;
+  return response.data.response;
 }
 
-const Chat = () => {
+const FastApiBlenderBotChat = () => {
   const navigate = useNavigate();
 
-  const [messages, setMessages] = useState([]);
-  const [inputValue, setInputValue] = useState("");
+  const [allUserMessages, setAllUserMessages] = useState([]);
+  const [messagesVisible, setMessagesVisible] = useState([]);
+  const [inputFieldText, setInputFieldText] = useState("");
   const [selectOptions, setSelectOptions] = useState([
     {
       type: "value",
@@ -50,19 +44,29 @@ const Chat = () => {
   ]);
 
   const handleInput = (e) => {
-    setInputValue(e.target.value);
+    setInputFieldText(e.target.value);
   };
 
   const submitMessage = async () => {
-    const query = inputValue;
-    setInputValue("");
+    const newUserMessage = inputFieldText;
+    const newAllUserMessages = [...allUserMessages, newUserMessage];
+    setAllUserMessages(newAllUserMessages);
+    console.log("QUESTIONS");
+    setInputFieldText("");
     // const response = await fetch(`/api/chat?message=${query}`);
-    const response = await getMessageFromApi(query);
+
+    // const messages = [
+    //   "Hello, how can I help you?",
+    //   "What services do you offer?",
+    //   "How much does it cost?",
+    // ];
+
+    const response = await getMessageFromApi(newAllUserMessages);
 
     // const data = await response.json();
-    setMessages([
-      ...messages,
-      { type: "query", text: query },
+    setMessagesVisible([
+      ...messagesVisible,
+      { type: "query", text: newUserMessage },
       { type: "response", text: response },
     ]);
     // setMessages([
@@ -87,6 +91,9 @@ const Chat = () => {
             navigate("/");
           }}
         />
+        <Typography variant="h5" sx={{ marginBottom: "30px" }}>
+          BlenderBot chat
+        </Typography>
         <div style={{}}>
           <input
             type="text"
@@ -96,7 +103,7 @@ const Chat = () => {
               fontSize: "20px",
               marginRight: "10px",
             }}
-            value={inputValue}
+            value={inputFieldText}
             onChange={handleInput}
             // when enter, send message
             onKeyPress={(e) => {
@@ -136,12 +143,12 @@ const Chat = () => {
               {/* <MenuItem value={option.label}>{option.label}</MenuItem> */}
             </div>;
           })}
-            {/* 
+          {/* 
           <FormControl
             key="formcontrol"
             sx={{ m: 1, minWidth: 120 }}
           ></FormControl>
-          <MenuItem value={10}>Ten</MenuItem>
+        <MenuItem value={10}>Ten</MenuItem>
         <MenuItem value={20}>Twenty</MenuItem>
         <MenuItem value={30}>Thirty</MenuItem> */}
           {/* <button
@@ -159,7 +166,7 @@ const Chat = () => {
             width: "70vw",
           }}
         >
-          {messages.map((message, index) => (
+          {messagesVisible.map((message, index) => (
             <div
               key={index}
               style={{
@@ -200,4 +207,4 @@ const Chat = () => {
   );
 };
 
-export default Chat;
+export default FastApiBlenderBotChat;
